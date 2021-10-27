@@ -2,8 +2,8 @@
 control ansible_connection=local
 
 [loadbalancer]
-lb01 ansible_user=ansible ansible_host=172.17.0.2
+lb01 ansible_user=ansible ansible_host=172.17.0.4
 
 [webserver]
-app01 ansible_user=ansible
-app02 ansible_user=ansible
+app01 ansible_user=ansible ansible_host=172.17.0.3
+app02 ansible_user=ansible ansible_host=172.17.0.5
