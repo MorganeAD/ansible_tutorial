@@ -1,11 +1,10 @@
-# docker build -t ansible_commun --target ansible_commun .
 FROM ubuntu:latest as ansible_commun
 
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt update
 
-RUN apt install -y python3
+RUN apt install -y python3 sudo
 
 RUN apt install -y tzdata
 RUN ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
@@ -16,12 +15,13 @@ RUN echo 'ansible:test' | chpasswd
 RUN mkdir -p /home/ansible/.ssh
 RUN chown -R ansible /home/ansible
 
-# -----------------------------------------------------------
-# docker build -t ansible_service --target ansible_service .
-# docker run --rm --name app01 -u ansible ansible_service
-# docker run --rm --name app02 -u ansible ansible_service
-# docker run --rm --name lb01 -u ansible ansible_service
+RUN echo "172.18.0.2 app01" >> /etc/hosts
+RUN echo "172.18.0.3 app02" >> /etc/hosts
+RUN echo "172.18.0.4 lb01" >> /etc/hosts
+RUN echo "172.18.0.5 control" >> /etc/hosts
 
+
+# -----------------------------------------------------------
 
 FROM ansible_commun as ansible_service
 
@@ -42,12 +42,10 @@ EXPOSE 22
 CMD ["/usr/sbin/sshd","-D"]
 
 # -----------------------------------------------------------
-# docker build -t ansible_control --target ansible_control .
-# docker run -it --rm --name control -u ansible -v $(pwd):/home/ansible/ansible_work ansible_control
 
 FROM ansible_commun as ansible_control
 
-RUN apt install -y vim software-properties-common sudo python3-pip
+RUN apt install -y vim software-properties-common python3-pip ssh curl
 
 RUN pip3 install ansible
 
