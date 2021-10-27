@@ -1,0 +1,49 @@
+version: "3.9"
+networks:
+  ansible_network:
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+          gateway: 172.18.0.0.1
+services:
+  commun:
+    image: ansible_commun
+    build: 
+      context: .
+      dockerfile: dockerfiles/commun.Dockerfile
+    extra_hosts:
+      - "app01:172.18.0.2"
+      - "app02:172.18.0.3"
+      - "lb01:172.18.0.4"
+      - "control:172.18.0.5"
+  control:
+    image: ansible_control
+    build: 
+      context: .
+      dockerfile: dockerfiles/control.Dockerfile
+    volumes:
+      - /home/niouby/hybird/ppd/pcore_project/tutorial/ansible:/home/ansible/ansible_work
+    tty: true
+    networks:
+      ansible_network:
+        ipv4_address: 172.18.0.5
+  lb01:
+    image: ansible_service
+    build: 
+      context: .
+      dockerfile: dockerfiles/service.Dockerfile
+    ports:
+      - "80:80"
+    networks:
+      ansible_network:
+        ipv4_address: 172.18.0.4
+  app01:
+    image: ansible_service
+    networks:
+      ansible_network:
+        ipv4_address: 172.18.0.2
+  app02:
+    image: ansible_service
+    networks:
+      ansible_network:
+        ipv4_address: 172.18.0.3
