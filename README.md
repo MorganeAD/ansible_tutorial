@@ -21,9 +21,9 @@ in a browser go on http://172.18.0.4
 
 # useful commands
 
-	docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <my_contener>
+	docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <my_container>
 
-	docker stop <my_contener>
+	docker stop <my_container>
 
 	docker images | head -n 10
 
