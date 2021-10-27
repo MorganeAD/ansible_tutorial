@@ -1,13 +1,16 @@
 
 Following this tutorial: [Ansible tutorial not for real beginners :p](https://linuxhint.com/ansible-tutorial-beginners/)
 
-# build docker images
 
-	docker build -t ansible_commun --target ansible_commun .
-	docker build -t ansible_control --target ansible_control .
-	docker build -t ansible_service --target ansible_service .
+# With Docker only
 
-# run containers with docker
+First, build docker images
+
+	docker build -f dockerfiles/commun.Dockerfile -t ansible_commun --target ansible_commun .
+	docker build -f dockerfiles/control.Dockerfile -t ansible_control --target ansible_control .
+	docker build -f dockerfiles/service.Dockerfile -t ansible_service --target ansible_service .
+
+Then, run containers with docker
 
 	docker network create --subnet=172.18.0.0/16 ansible_network
 
@@ -17,9 +20,22 @@ Following this tutorial: [Ansible tutorial not for real beginners :p](https://li
 
 	docker run -it --rm --net ansible_network --ip 172.18.0.5 --name control -u ansible -v $(pwd):/home/ansible/ansible_work ansible_control
 
+
+# With Docker-compose
+
+	docker-compose build
+
+	docker-compose up
+
+	docker-compose exec --user ansible control bash
+
+
+# Check the webservice
+
 in a browser go on http://172.18.0.4
 
-# useful commands
+
+# Useful commands
 
 	docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <my_container>
 
