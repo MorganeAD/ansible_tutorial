@@ -27,7 +27,7 @@ FROM ansible_commun as ansible_service
 
 RUN apt install -y openssh-server
 
-COPY id_ed25519_ansible_tuto.pub /home/ansible/.ssh/authorized_keys
+COPY ssh_config/id_ed25519_ansible_tuto.pub /home/ansible/.ssh/authorized_keys
 
 RUN chmod 600 /home/ansible/.ssh/authorized_keys
 
@@ -49,9 +49,7 @@ RUN apt install -y vim software-properties-common python3-pip ssh curl
 
 RUN pip3 install ansible
 
-COPY id_ed25519_ansible_tuto /home/ansible/.ssh
-COPY id_ed25519_ansible_tuto.pub /home/ansible/.ssh
-COPY ssh_config /home/ansible/.ssh/config
+COPY ssh_config/* /home/ansible/.ssh/
 
 RUN chown -R ansible /home/ansible/.ssh
 
