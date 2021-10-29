@@ -21,6 +21,8 @@ Then, run containers with docker
 	docker run -it --rm --net ansible_network --ip 172.18.0.5 --name control -u ansible -v $(pwd):/home/ansible/ansible_work ansible_control
 
 
+In a browser go on http://172.18.0.4
+
 # With Docker-compose
 
 	docker-compose build
@@ -29,10 +31,11 @@ Then, run containers with docker
 
 	docker-compose exec --user ansible control bash
 
+In a browser go on http://locahost
 
 # Check the webservice
 
-in a browser go on http://172.18.0.4
+
 
 
 # Useful commands
